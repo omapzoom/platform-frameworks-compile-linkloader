@@ -98,9 +98,13 @@ getMaxNumStubs(ELFObjectTy const *obj) const {
       for (size_t i = 0; i < size(); ++i) {
         ELFRelocTy *rel = table[i];
 
-        if (rel->getType() == R_ARM_CALL ||
-            rel->getType() == R_ARM_THM_CALL) {
+        switch (rel->getType()) {
+        case R_ARM_CALL:
+        case R_ARM_THM_CALL:
+        case R_ARM_JUMP24:
+        case R_ARM_THM_JUMP24:
           sym_index_set.insert(rel->getSymTabIndex());
+          break;
         }
       }
 
